@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Duck</title>
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="text-center">
+    <div id="imagem_pato"><img class="rounded" id="pato" src=""></div>
+    <button type="button" class="btn btn-primary" id="refresh">New Image</button>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="switch_image_loop" checked>
+        <label class="custom-control-label" for="switch_image_loop">Image Change</label>
+    </div>
+</div>
+
+<img src="quack.gif" alt="Quack" class="quack"></a>
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        get_duck();
+    });
+
+    $("#refresh").click(function(){
+        get_duck();
+    });
+
+    var tid = setTimeout(mycode, 2000);
+
+    function mycode() {
+        get_duck();
+        tid = setTimeout(mycode, 2000); // repeat myself
+    }
+    function abortTimer() {
+        clearTimeout(tid);
+    }
+
+    $('#switch_image_loop').on('change', function (event, state) {
+        if($(this).prop("checked")){
+            tid = setTimeout(mycode, 2000);
+        } else {
+            abortTimer()
+        }
+    });
+
+    function get_duck(){
+        $.ajax({
+            url: "get.php",
+            type: "GET",
+            contentType: 'application/json',
+            cache: false,
+            dataType: 'json',
+            crossDomain: true,
+            success: function (msg) {
+                $("#pato").attr('src', msg.url);
+            },
+        });
+    }
+</script>
+</body>
+</html>
